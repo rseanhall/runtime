@@ -878,7 +878,7 @@ int fx_muxer_t::get_runtime_delegate(host_context_t *context, coreclr_delegate_t
     case coreclr_delegate_type::com_register:
     case coreclr_delegate_type::com_unregister:
         if (context->is_app)
-            return StatusCode::InvalidArgFailure;
+            return StatusCode::HostApiUnsupportedScenario;
         break;
     default:
         // Always allowed
