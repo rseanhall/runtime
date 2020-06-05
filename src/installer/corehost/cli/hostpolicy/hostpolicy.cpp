@@ -635,8 +635,8 @@ SHARED_API int HOSTPOLICY_CALLTYPE corehost_initialize(const corehost_initialize
     if (context_contract == nullptr)
         return StatusCode::InvalidArgFailure;
 
-    bool wait_for_initialized = (options & intialization_options_t::wait_for_initialized) != 0;
-    bool get_contract = (options & intialization_options_t::get_contract) != 0;
+    bool wait_for_initialized = (options & initialization_options_t::wait_for_initialized) != 0;
+    bool get_contract = (options & initialization_options_t::get_contract) != 0;
     if (wait_for_initialized && get_contract)
     {
         trace::error(_X("Specifying both initialization options for wait_for_initialized and get_contract is not allowed"));

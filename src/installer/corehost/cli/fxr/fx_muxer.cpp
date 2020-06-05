@@ -735,7 +735,7 @@ int fx_muxer_t::initialize_for_app(
     }
 
     std::unique_ptr<host_context_t> context;
-    rc = initialize_context(hostpolicy_dir, *init, intialization_options_t::none, context);
+    rc = initialize_context(hostpolicy_dir, *init, initialization_options_t::none, context);
     if (rc != StatusCode::Success)
     {
         trace::error(_X("Failed to initialize context for app: %s. Error code: 0x%x"), host_info.app_path.c_str(), rc);
@@ -756,7 +756,7 @@ int fx_muxer_t::initialize_for_runtime_config(
     const pal::char_t *runtime_config_path,
     hostfxr_handle *host_context_handle)
 {
-    int32_t initialization_options = intialization_options_t::none;
+    int32_t initialization_options = initialization_options_t::none;
     const host_context_t *existing_context;
     {
         std::unique_lock<std::mutex> lock{ g_context_lock };
@@ -773,7 +773,7 @@ int fx_muxer_t::initialize_for_runtime_config(
         }
         else if (existing_context->type == host_context_type::empty)
         {
-            initialization_options |= intialization_options_t::wait_for_initialized;
+            initialization_options |= initialization_options_t::wait_for_initialized;
         }
     }
 
@@ -930,7 +930,7 @@ const host_context_t* fx_muxer_t::get_active_host_context()
     {
         hostpolicy_context_contract.version = sizeof(corehost_context_contract);
         propagate_error_writer_t propagate_error_writer_to_corehost(hostpolicy_contract.set_error_writer);
-        int rc = hostpolicy_contract.initialize(nullptr, intialization_options_t::get_contract, &hostpolicy_context_contract);
+        int rc = hostpolicy_contract.initialize(nullptr, initialization_options_t::get_contract, &hostpolicy_context_contract);
         if (rc != StatusCode::Success)
         {
             trace::error(_X("Failed to get contract for existing initialized hostpolicy: 0x%x"), rc);
