@@ -630,11 +630,12 @@ namespace
 // initializations. In the case of Success_DifferentRuntimeProperties, it is left to the consumer to verify that
 // the difference in properties is acceptable.
 //
-SHARED_API int HOSTPOLICY_CALLTYPE corehost_initialize(const corehost_initialize_request_t *init_request, int32_t options, /*out*/ corehost_context_contract *context_contract)
+SHARED_API int HOSTPOLICY_CALLTYPE corehost_initialize(const corehost_initialize_request_t *init_request, uint32_t options, /*out*/ corehost_context_contract *context_contract)
 {
     if (context_contract == nullptr)
         return StatusCode::InvalidArgFailure;
 
+    bool version_set = (options & initialization_options_t::context_contract_version_set) != 0;
     bool wait_for_initialized = (options & initialization_options_t::wait_for_initialized) != 0;
     bool get_contract = (options & initialization_options_t::get_contract) != 0;
     if (wait_for_initialized && get_contract)
@@ -744,7 +745,7 @@ SHARED_API int HOSTPOLICY_CALLTYPE corehost_initialize(const corehost_initialize
             rc = StatusCode::Success_DifferentRuntimeProperties;
     }
 
-    auto version_lo = context_contract->version;
+    auto version_lo = version_set ? context_contract->version : 7 * sizeof(size_t);
     context_contract->version = sizeof(corehost_context_contract);
     context_contract->get_property_value = get_property;
     context_contract->set_property_value = set_property;

@@ -9,11 +9,12 @@
 #include "hostpolicy.h"
 #include <pal.h>
 
-enum initialization_options_t : int32_t
+enum initialization_options_t : uint32_t
 {
     none = 0x0,
-    wait_for_initialized = 0x1,  // Wait until initialization through a different request is completed
-    get_contract = 0x2,          // Get the contract for the initialized hostpolicy
+    wait_for_initialized = 0x1,                // Wait until initialization through a different request is completed
+    get_contract = 0x2,                        // Get the contract for the initialized hostpolicy
+    context_contract_version_set = 0x80000000, // The version field has been set in the corehost_context_contract
 };
 
 // Delegates for these types will have the stdcall calling convention unless otherwise specified

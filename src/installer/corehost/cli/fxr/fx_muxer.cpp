@@ -756,7 +756,7 @@ int fx_muxer_t::initialize_for_runtime_config(
     const pal::char_t *runtime_config_path,
     hostfxr_handle *host_context_handle)
 {
-    int32_t initialization_options = initialization_options_t::none;
+    uint32_t initialization_options = initialization_options_t::none;
     const host_context_t *existing_context;
     {
         std::unique_lock<std::mutex> lock{ g_context_lock };
@@ -926,11 +926,12 @@ const host_context_t* fx_muxer_t::get_active_host_context()
         return nullptr;
     }
 
-    corehost_context_contract hostpolicy_context_contract;
+    corehost_context_contract hostpolicy_context_contract = {};
     {
         hostpolicy_context_contract.version = sizeof(corehost_context_contract);
         propagate_error_writer_t propagate_error_writer_to_corehost(hostpolicy_contract.set_error_writer);
-        int rc = hostpolicy_contract.initialize(nullptr, initialization_options_t::get_contract, &hostpolicy_context_contract);
+        uint32_t options = initialization_options_t::get_contract | initialization_options_t::context_contract_version_set;
+        int rc = hostpolicy_contract.initialize(nullptr, options, &hostpolicy_context_contract);
         if (rc != StatusCode::Success)
         {
             trace::error(_X("Failed to get contract for existing initialized hostpolicy: 0x%x"), rc);
