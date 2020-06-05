@@ -870,8 +870,20 @@ int fx_muxer_t::run_app(host_context_t *context)
 
 int fx_muxer_t::get_runtime_delegate(host_context_t *context, coreclr_delegate_type type, void **delegate)
 {
-    if (context->is_app)
-        return StatusCode::InvalidArgFailure;
+    switch (type)
+    {
+    case coreclr_delegate_type::com_activation:
+    case coreclr_delegate_type::load_in_memory_assembly:
+    case coreclr_delegate_type::winrt_activation:
+    case coreclr_delegate_type::com_register:
+    case coreclr_delegate_type::com_unregister:
+        if (context->is_app)
+            return StatusCode::InvalidArgFailure;
+        break;
+    default:
+        // Always allowed
+        break;
+    }
 
     if (type > coreclr_delegate_type::load_assembly_and_get_function_pointer
         && (size_t)type >= context->hostpolicy_context_contract.unknown_delegate_type)
