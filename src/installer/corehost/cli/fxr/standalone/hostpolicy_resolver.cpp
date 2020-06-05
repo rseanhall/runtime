@@ -201,8 +201,8 @@ int hostpolicy_resolver::load(
         g_hostpolicy_contract.corehost_main = reinterpret_cast<corehost_main_fn>(pal::get_symbol(g_hostpolicy, "corehost_main"));
         g_hostpolicy_contract.corehost_main_with_output_buffer = reinterpret_cast<corehost_main_with_output_buffer_fn>(pal::get_symbol(g_hostpolicy, "corehost_main_with_output_buffer"));
 
-        // It's possible to not have corehost_set_error_writer and corehost_initialize. These were
-        // introduced in 3.0, so 2.0 hostpolicy would not have the exports. In this case, we will
+        // It's possible to not have corehost_set_error_writer, corehost_initialize, corehost_main, and corehost_main_with_output_buffer.
+        // These were introduced in 3.0, so 2.0 hostpolicy would not have the exports. In this case, we will
         // not propagate the error writer and errors will still be reported to stderr. Callers are
         // responsible for checking that the function pointers are not null before using them.
 

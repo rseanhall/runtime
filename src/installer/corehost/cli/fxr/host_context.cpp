@@ -35,6 +35,7 @@ namespace
 
             if (rc == StatusCode::Success)
             {
+                hostpolicy_context_contract->version = sizeof(corehost_context_contract);
                 rc = hostpolicy_contract.initialize(init_request, initialization_options, hostpolicy_context_contract);
             }
         }

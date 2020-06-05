@@ -873,6 +873,12 @@ int fx_muxer_t::get_runtime_delegate(host_context_t *context, coreclr_delegate_t
     if (context->is_app)
         return StatusCode::InvalidArgFailure;
 
+    if (type > coreclr_delegate_type::load_assembly_and_get_function_pointer
+        && (size_t)type >= context->hostpolicy_context_contract.unknown_delegate_type)
+    {
+        return StatusCode::HostApiUnsupportedVersion;
+    }
+
     const corehost_context_contract &contract = context->hostpolicy_context_contract;
     {
         propagate_error_writer_t propagate_error_writer_to_corehost(context->hostpolicy_contract.set_error_writer);
@@ -910,6 +916,7 @@ const host_context_t* fx_muxer_t::get_active_host_context()
 
     corehost_context_contract hostpolicy_context_contract;
     {
+        hostpolicy_context_contract.version = sizeof(corehost_context_contract);
         propagate_error_writer_t propagate_error_writer_to_corehost(hostpolicy_contract.set_error_writer);
         int rc = hostpolicy_contract.initialize(nullptr, intialization_options_t::get_contract, &hostpolicy_context_contract);
         if (rc != StatusCode::Success)
