@@ -757,9 +757,9 @@ SHARED_API int HOSTPOLICY_CALLTYPE corehost_initialize(const corehost_initialize
     //An old hostfxr may not have provided enough space for these fields.
     //The version_lo (sizeof) the old hostfxr saw at build time will be
     //smaller and we should not attempt to write the fields in that case.
-    if (version_lo >= offsetof(corehost_context_contract, unknown_delegate_type) + sizeof(context_contract->unknown_delegate_type))
+    if (version_lo >= offsetof(corehost_context_contract, last_known_delegate_type) + sizeof(context_contract->last_known_delegate_type))
     {
-        context_contract->unknown_delegate_type = (size_t)coreclr_delegate_type::unknown;
+        context_contract->last_known_delegate_type = (size_t)coreclr_delegate_type::__last - 1;
     }
 
     return rc;

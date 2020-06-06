@@ -886,7 +886,7 @@ int fx_muxer_t::get_runtime_delegate(host_context_t *context, coreclr_delegate_t
     }
 
     if (type > coreclr_delegate_type::load_assembly_and_get_function_pointer
-        && (size_t)type >= context->hostpolicy_context_contract.unknown_delegate_type)
+        && (size_t)type > context->hostpolicy_context_contract.last_known_delegate_type)
     {
         trace::error(_X("The requested delegate type is not available in the target framework."));
         return StatusCode::HostApiUnsupportedVersion;
