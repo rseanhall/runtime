@@ -745,7 +745,8 @@ SHARED_API int HOSTPOLICY_CALLTYPE corehost_initialize(const corehost_initialize
             rc = StatusCode::Success_DifferentRuntimeProperties;
     }
 
-    auto version_lo = version_set ? context_contract->version : 7 * sizeof(size_t);
+    // If version wasn't set, then it would have the original size of corehost_context_contract, which is 7 * sizeof(size_t).
+    size_t version_lo = version_set ? context_contract->version : 7 * sizeof(size_t);
     context_contract->version = sizeof(corehost_context_contract);
     context_contract->get_property_value = get_property;
     context_contract->set_property_value = set_property;
@@ -754,9 +755,9 @@ SHARED_API int HOSTPOLICY_CALLTYPE corehost_initialize(const corehost_initialize
     context_contract->run_app = run_app;
     context_contract->get_runtime_delegate = get_delegate;
 
-    //An old hostfxr may not have provided enough space for these fields.
-    //The version_lo (sizeof) the old hostfxr saw at build time will be
-    //smaller and we should not attempt to write the fields in that case.
+    // An old hostfxr may not have provided enough space for these fields.
+    // The version_lo (sizeof) the old hostfxr saw at build time will be
+    // smaller and we should not attempt to write the fields in that case.
     if (version_lo >= offsetof(corehost_context_contract, last_known_delegate_type) + sizeof(context_contract->last_known_delegate_type))
     {
         context_contract->last_known_delegate_type = (size_t)coreclr_delegate_type::__last - 1;
