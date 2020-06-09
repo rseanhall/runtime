@@ -885,6 +885,9 @@ int fx_muxer_t::get_runtime_delegate(host_context_t *context, coreclr_delegate_t
         break;
     }
 
+    // last_known_delegate_type was added in 5.0, so old versions won't set it and it will be zero.
+    // But when get_runtime_delegate was originally implemented in 3.0,
+    // it supported up to load_assembly_and_get_function_pointer so we check that first.
     if (type > coreclr_delegate_type::load_assembly_and_get_function_pointer
         && (size_t)type > context->hostpolicy_context_contract.last_known_delegate_type)
     {
